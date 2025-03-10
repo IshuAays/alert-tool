@@ -7,15 +7,16 @@ from rephrase import rephrase_prompt_with_context
 if "conversation_history" not in st.session_state:
     st.session_state.conversation_history = []
 
-st.title("Power BI Assistant Chat 💬")
+st.title("Aays IT Support AI Bot")
 
 # Display chat history
 for entry in st.session_state.conversation_history:
-    role, message = entry["role"], entry["message"]
+    role = entry["role"]
+    message = entry.get("original_message", entry["message"])  # Always show original query if available
     with st.chat_message(role):
         st.write(message)
 
-query = st.chat_input("Ask me about Power BI...")
+query = st.chat_input("Ask me anything about Aays IT systems")
 
 if query:
     # ✅ Get both original and rephrased query
@@ -31,19 +32,23 @@ if query:
     query_category = categorize_query(rephrased_query)
 
     # Format previous conversation history
-    previous_conversation = "\n".join([f"{e['role']}: {e['message']}" for e in st.session_state.conversation_history])
+    previous_conversation = "\n".join([f"{e['role']}: {e.get('original_message', e['message'])}" for e in st.session_state.conversation_history])
     full_query = f"{previous_conversation}\nUser: {rephrased_query}"
 
-    # ✅ Store rephrased query in conversation history, but display original query on Streamlit
-    st.session_state.conversation_history.append({"role": "user", "message": rephrased_query})
+    # ✅ Store both original & rephrased query in conversation history
+    st.session_state.conversation_history.append({
+        "role": "user",
+        "original_message": original_query,  # Store original query
+        "message": rephrased_query  # Store rephrased query for LLM processing
+    })
 
     # ✅ Generate response
     if query_category == "alert_tool_query":
         response = llm_response(full_query, 1)
     elif query_category == "greeting":
-        response = "Hello! I'm here to help with Power BI-related queries."
+        response = "Hello! I'm here to help with any questions on Aays IT systems"
     elif query_category == "generic_question":
-        response = "I'm here to help with Power BI-related queries. Thank you!"
+        response = "Hello! I'm here to help with any questions on Aays IT systems, Thank you!"
     else:
         response = "Cannot classify this query. Please provide more details."
 

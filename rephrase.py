@@ -13,6 +13,9 @@ API_VERSION = st.secrets["API_VERSION"]
 # Load environment variables
 # load_dotenv()
 
+
+
+
 # Get Azure OpenAI Credentials from .env
 # AZURE_OPENAI_API_KEY = os.getenv("AZURE_OPENAI_API_KEY")
 # AZURE_OPENAI_ENDPOINT = os.getenv("AZURE_OPENAI_ENDPOINT")
@@ -104,8 +107,7 @@ def rephrase_prompt_with_context(current_prompt, past_interactions):
                 {"role": "system", "content": system_prompt},
                 {"role": "user", "content": current_prompt}
             ],
-            temperature=0.0,
-            max_tokens=200
+            temperature=0.0
         )
         
         json_response = response.choices[0].message.content.strip()

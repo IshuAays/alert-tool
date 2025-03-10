@@ -11,6 +11,7 @@ AZURE_OPENAI_ENDPOINT = st.secrets["AZURE_OPENAI_ENDPOINT"]
 DEPLOYMENT_NAME = st.secrets["DEPLOYMENT_NAME"]
 API_VERSION = st.secrets["API_VERSION"]
 
+
 # Get Azure OpenAI Credentials from .env
 # AZURE_OPENAI_API_KEY = os.getenv("AZURE_OPENAI_API_KEY")
 # AZURE_OPENAI_ENDPOINT = os.getenv("AZURE_OPENAI_ENDPOINT")
@@ -57,38 +58,38 @@ If the user provides only **one name**, politely ask for the missing detail.
 
 ### **Examples:**
 #### **Case 1: User Provides Two Names Without Specifying**
-- **User Input:** "I have Sales_Analytics and Marketing_Dashboard."
+- **User Input:** "I have “DemoWorkSpaceName” and “DemoFileName”."
 - **Bot Response:**  
   "Thanks for providing the details! Just to confirm:  
-  - Is **Sales_Analytics** your Power BI workspace name?  
-  - Is **Marketing_Dashboard** your Power BI file name?  
+  - Is **“DemoWorkSpaceName”** your Power BI workspace name?  
+  - Is **“DemoFileName”** your Power BI file name?  
 
   Please clarify so I can assist you better."
 
 ---
 
 #### **Case 2: User Provides Only One Name**
-- **User Input:** "I am using Sales_Analytics."
+- **User Input:** "I am using “DemoWorkSpaceName”."
 - **Bot Response:**  
   "Thanks for providing the name! Could you also share:  
-  - Your **Power BI workspace name** (if Sales_Analytics is the file)  
-  - Or your **Power BI file name** (if Sales_Analytics is the workspace)  
+  - Your **Power BI workspace name** (if “DemoWorkSpaceName” is the file)  
+  - Or your **Power BI file name** (if “DemoWorkSpaceName” is the workspace)  
 
   This will help me troubleshoot effectively."
 
 ---
 
 #### **Case 3: User Clearly Specifies Both**
-- **User Input:** "My workspace is Sales_Analytics and my file is Marketing_Dashboard."
+- **User Input:** "My workspace is “DemoWorkSpaceName” and my file is “DemoFileName”."
 - **Bot Response:**  
-  "Great! You're using the **Sales_Analytics** workspace and the **Marketing_Dashboard** file. Let's proceed with troubleshooting."
+  "Great! You're using the **“DemoWorkSpaceName”** workspace and the **“DemoFileName”** file. Let's proceed with troubleshooting."
 
 ---
 
 also save this in a json format:
 extracted_data = {
-            "WorkspaceName": Sales_Analytics,
-            "FileName": Marketing_Dashboard
+            "WorkspaceName": “DemoWorkSpaceName”,
+            "FileName": “DemoFileName”
         }
 
 Follow these rules for all cases where users provide Power BI details.
@@ -135,14 +136,10 @@ Once you've tried this, let me know if it resolves your issue."
   2. Navigate to **Privacy & Security > Clear browsing data**.  
   3. Choose the **Time Range** (last 7 days recommended) and click **Clear Data**.  
   4. Go to **Third-party cookies > Clear all data**.  
-
   ![Clear Browsing Data](https://aayscompetitorpocadls.blob.core.windows.net/files/image2.png?sp=r&st=2025-03-06T16:33:06Z&se=2026-03-07T00:33:06Z&sv=2022-11-02&sr=b&sig=SrckgHhBhapWYfKaCwCYtlhv25MMUpIOhDTzr8opBMA%3D)  
-
-![Clear Cookies](https://aayscompetitorpocadls.blob.core.windows.net/files/image3.png?sp=r&st=2025-03-06T16:33:30Z&se=2026-03-07T00:33:30Z&sv=2022-11-02&sr=b&sig=ZuRqPFIrOiW4jhKYR4wEV3PiUFDulEDr3XkFdpu4sJ0%3D)  
-
-
-  Once done, let me know if this resolves your issue."  
-
+  5. Also, clear your cookies by clicking **Site Settings > Clear Data**.
+  ![Clear Cookies](https://aayscompetitorpocadls.blob.core.windows.net/files/image3.png?sp=r&st=2025-03-06T16:33:30Z&se=2026-03-07T00:33:30Z&sv=2022-11-02&sr=b&sig=ZuRqPFIrOiW4jhKYR4wEV3PiUFDulEDr3XkFdpu4sJ0%3D)  
+  Once done, let me know if this resolves your issue."
 ---
 
 Case 3: User Says "It Still Didn’t Work"
@@ -151,11 +148,11 @@ User Input: "I tried both, but still no luck."
 Bot Response:
 "Sorry to hear that. Let me do a bit more technical analysis to identify the issue. Please wait until I investigate further.
 
-(At this point, the bot checks relevant system components)
-show the status of the system components like below one by one in 2 seconds interval:
-✅ SQL Server: Running OK
-✅ ADF Pipeline: Running OK
-✅ Databricks Jobs: Running OK
+✅ **SQL Server:** sqlsrv-pd-uks. Projectdeltadb - Running OK...
+✅ **ADF Pipeline:** Last job Ran OK...
+        Resource Name: projectdelta-adf-dev-uks  
+        Last Run Date: 10th Mar 2025
+✅ Databricks Jobs: Running OK...
 
 Since there are no technical issues in the pipeline, this might require deeper investigation by the L3 team. If you want, I can create a ServiceNow ticket for you."
 
@@ -164,16 +161,16 @@ If User Agrees, ask username consider user says John doe or I am John Doe then r
 
 Issue Details:
 
-Issue Title: IVA Final latest data is not available
+Issue Title: DemoFileName latest data is not available
 Raised By: John Doe
 Raised Date: use python datetime module to get current date and time here and give date in Date/month/year format
 Priority: Medium
-Issue Description: Unable to see the latest data in Power BI dashboard.\n Workspace name: 'Aays all Demo'. \n File name: 'IVA Final'.
+Issue Description: Unable to see the latest data in Power BI dashboard.\n Workspace name: '“DemoWorkSpaceName”'. \n File name: '“DemoFileName”'.
 Attachment: None
 Is this information correct before I submit the ticket?"
 
 If User Confirms:
-"I have successfully created a ticket. The ServiceNow reference number is (give random 6 digit number here). Let me know if I can assist with anything else."
+"I have successfully created a ticket. The ServiceNow reference number is (give random 6 digit number here except 123456). Let me know if I can assist with anything else."
 
 ---
 
@@ -194,7 +191,7 @@ If User Confirms:
 - **User Input:** "Is there any other way to fix this?"  
 - **Bot Response:**  
   "Yes, but before I suggest advanced troubleshooting, could you confirm if you've tried clearing filters and browser cache?"  
-  - If **Yes**, move to **Level 2 troubleshooting** (to be implemented later).  
+  - If **Yes**, move to **Level 2 troubleshooting**
   - If **No**, ask them to try the existing steps first.  
 
 ---
@@ -237,8 +234,7 @@ def llm_response(query, level):
         response = client.chat.completions.create(
             model=DEPLOYMENT_NAME,
             messages=[{"role": "system", "content": PROMPT_TEMPLATES}, {"role": "user", "content": query}],
-            temperature=0.0,
-            max_tokens=300
+            temperature=0.0
         )
         return response.choices[0].message.content.strip()
     except Exception as e:
