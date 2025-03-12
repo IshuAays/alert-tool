@@ -14,6 +14,8 @@ API_VERSION = st.secrets["API_VERSION"]
 
 
 
+
+
 # Get Azure OpenAI Credentials from .env
 # AZURE_OPENAI_API_KEY = os.getenv("AZURE_OPENAI_API_KEY")
 # AZURE_OPENAI_ENDPOINT = os.getenv("AZURE_OPENAI_ENDPOINT")
@@ -38,19 +40,112 @@ def clean_json_response(response_text):
 
 def categorize_query(query):
     prompt = f"""
-    You are a Query Classifier with 100% accuracy.
-    Your task is to classify a user query into one of three categories:  
-    1. **alert_tool_query** → Related to Power BI issues or ServiceNow requests related to alerts, tickets, or reporting.  
-    2. **greeting** → Simple greetings like "Hello".  
-    3. **generic_question** → General knowledge or informational questions.  
+    You are a Query Classifier with 100% F1 score.
+    - Your task is to classify a user query into one of 3 categories <alert_tool_query|greeting|generic_question>:
+            1. alert_tool_query: 
+                    Examples:
+                    - **Query**: "Why is my Power BI dashboard not showing updated data?"
+                        **Output**: `alert_tool_query` 
+                    
+                    - **Query**: "How can I fix the 'Refresh Failed' error in Power BI?"
+                        **Output**: `alert_tool_query`  
 
-    Examples:
-    - "My Power BI dashboard is not refreshing" → `"alert_tool_query"`
-    - "Hey, how are you?" → `"greeting"`
-    - "Tell me about SQL queries" → `"generic_question"`
-    - "Could you please update the ServiceNow ticket to include my name, Ishu Jangid, in the 'Raised By' field and set the 'Raised Date' to 10/03/2025?" → `"alert_tool_query"`
-    - "Create an alert in ServiceNow if Power BI fails to refresh" → `"alert_tool_query"`
-    - "What is the capital of France?" → `"generic_question"`
+                    - **Query**: "I cannot open my .pbix file, how can I troubleshoot this?"
+                        **Output**: `alert_tool_query`  
+
+                    - **Query**: "Why is my Power BI visual not displaying correctly?"
+                        **Output**: `alert_tool_query`  
+
+                    - **Query**: "How can I resolve the 'Data source credentials' error in Power BI Service?"
+                        **Output**: `alert_tool_query`  
+
+                    - **Query**: "What steps can I take if my Power BI data model isn't loading?"
+                        **Output**: `alert_tool_query`  
+
+                    - **Query**: "How can I reduce the load time of my Power BI report?"
+                        **Output**: `alert_tool_query`  
+
+                    - **Query**: "Why are my Power BI slicers not filtering data correctly?"
+                        **Output**: `alert_tool_query`  
+
+                    - **Query**: "How can I identify the cause of incorrect calculations in my Power BI report?"
+                        **Output**: `alert_tool_query`
+
+                    - **Query**: "How do I fix relationship issues between tables in Power BI?"
+                        **Output**: `alert_tool_query` 
+
+                    - **Query**: "Can you please raise a service ticket for my Power BI data refresh failure?"
+                        **Output**: `alert_tool_query`
+
+                    - **Query**: "Can you raise a support ticket for my broken Power BI dashboard?"
+                        **Output**: `alert_tool_query`
+
+                    - **Query**: "Please create a service request for the 'Access Denied' error in Power BI Service."
+                        **Output**: `alert_tool_query`
+
+                    - **Query**: "Can you log a ticket for my Power BI workspace access issue?"
+                        **Output**: `alert_tool_query` 
+
+                    - **Query**: "Can you submit a support ticket for my Power BI dataset connection failure?"
+                        **Output**: `alert_tool_query`
+
+                    - **Query**: "I cannot find my Power BI workspace named 'Sales_Analytics'. Can you help?"
+                        **Output**: `alert_tool_query`
+
+                    - **Query**: "Can you please raise a service ticket for missing workspace 'Finance_Reports'?"
+                        **Output**: `alert_tool_query`
+
+                    - **Query**: "I accidentally deleted my workspace 'HR_Dashboard'. Can you restore it?"
+                        **Output**: `alert_tool_query` 
+
+                    - **Query**: "I can't find my .pbix file named 'Monthly_Sales_Report'. Can you help locate it?"
+                        **Output**: `alert_tool_query` 
+
+                    - **Query**: "Can you submit a ticket to recover my lost .pbix file named 'Revenue_Analysis'?"
+                        **Output**: `alert_tool_query`  
+
+
+
+            2. **greeting**: The query is a friendly or polite opening that does not require a detailed response beyond acknowledgment. These queries are commonly used to initiate a conversation in a casual or formal manner (e.g., "Hi, how are you?" or "Good morning!").  
+                    Examples:  
+                    - **Query**: "Hi, how are you?"  
+                        **Output**: `greeting`  
+                    - **Query**: "Hello!"  
+                        **Output**: `greeting`  
+                    - **Query**: "Good morning. What's up?"  
+                        **Output**: `greeting`  
+                    - **Query**: "Hey there!"  
+                        **Output**: `greeting`  
+                    - **Query**: "Good afternoon!"  
+                        **Output**: `greeting`  
+                    - **Query**: "Yo!"  
+                        **Output**: `greeting`  
+                    - **Query**: "How's it going?"  
+                        **Output**: `greeting`                      
+ 
+            3. **generic_question**: The query seeks general information, facts, or explanations on a broad range of topics without specifying a particular document or dataset. These questions can be about definitions, concepts, events, time, locations, or general knowledge (e.g., "What is the capital of France?" or "How does machine learning work?").  
+                    Examples:  
+                    - **Query**: "What is the capital of France?"  
+                        **Output**: `generic_question`  
+                    - **Query**: "How does machine learning work?"  
+                        **Output**: `generic_question`  
+                    - **Query**: "Who is the CEO of Tesla?"  
+                        **Output**: `generic_question`  
+                    - **Query**: "What are the benefits of drinking water?"  
+                        **Output**: `generic_question`  
+                    - **Query**: "Can you explain the theory of relativity?"  
+                        **Output**: `generic_question`  
+                    - **Query**: "What is the time today?"  
+                        **Output**: `generic_question`  
+                    - **Query**: "What day of the week is it?"  
+                        **Output**: `generic_question`  
+                    - **Query**: "How many days are in a leap year?"  
+                        **Output**: `generic_question`  
+                    - **Query**: "What is the population of India?"  
+                        **Output**: `generic_question`  
+                    - **Query**: "What is the weather like today?"  
+                        **Output**: `generic_question`  
+
 
     Classify this query: "{query}"  
     Respond ONLY with a JSON object in this format:  

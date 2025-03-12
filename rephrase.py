@@ -6,12 +6,17 @@ from dotenv import load_dotenv
 import streamlit as st
 
 
+# Load environment variables
+# load_dotenv()
+
+
 AZURE_OPENAI_API_KEY = st.secrets["AZURE_OPENAI_API_KEY"]
 AZURE_OPENAI_ENDPOINT = st.secrets["AZURE_OPENAI_ENDPOINT"]
 DEPLOYMENT_NAME = st.secrets["DEPLOYMENT_NAME"]
 API_VERSION = st.secrets["API_VERSION"]
-# Load environment variables
-# load_dotenv()
+
+
+
 
 
 
